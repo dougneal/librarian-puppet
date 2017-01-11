@@ -47,6 +47,7 @@ module Librarian
       option "destructive", :type => :boolean, :default => false
       option "local", :type => :boolean, :default => false
       option "use-v1-api", :type => :boolean, :default => true
+
       def install
 
         ensure!
@@ -68,6 +69,16 @@ module Librarian
         resolve!
         debug { "Install: dependencies resolved"}
         install!
+      end
+
+      desc "graph", "Generate a GraphViz dotfile of module dependencies."
+
+      def graph
+        resolve!
+        debug { "Install: dependencies resolved"}
+        a = Action::Graph.new(environment, options)
+        a.run
+        say a.dot
       end
 
       # only used to replace / to - in the module names
